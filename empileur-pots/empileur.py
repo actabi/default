@@ -1,29 +1,35 @@
-"""Bague d'empilage pour pots de yaourt en verre (type La Laitière) — génère empileur_pots.stl
-Réversible : un cône reçoit le fond d'un pot, l'autre reçoit le bord (col) de l'autre pot.
+"""Bague d'empilage pour pots de yaourt en verre (La Laitière) — génère empileur_pots.stl
+Pots rangés retournés : le côté "logement fond" coiffe le fond du pot du bas,
+le côté "logement bord" reçoit la lèvre du pot du haut.
+Impression : logement bord sur le plateau, sans supports.
 Modifier les paramètres puis : python3 empileur.py"""
 import numpy as np, manifold3d as m3, trimesh
 
-# ---------------- paramètres (mm) ----------------
-D_COL   = 58.0   # diamètre extérieur du bord (col) du pot   <-- estimé, à mesurer
-D_FOND  = 44.0   # diamètre du fond plat du pot              <-- estimé, à mesurer
-MARGE   = 4.0    # tolérance : chaque cône accepte ±MARGE autour de la mesure
-H_FOND  = 8.0    # hauteur du cône côté fond
-H_COL   = 6.0    # hauteur du cône côté col
-BOMBE   = 1.0    # relief de l'anneau extérieur
-# -------------------------------------------------
-H = H_FOND + H_COL
-r_trou = D_FOND/2 - 1.0                 # trou central (le fond ne passe pas à travers)
-r_f0   = r_trou + H_FOND - 1.2                # cône fond : 45°, s'ouvre vers le bas
-r_c0   = D_COL/2 - MARGE                # cône col : 45°, s'ouvre vers le haut
-r_c1   = r_c0 + H_COL
-r_ext  = max(r_f0, r_c1) + 2.0
+# ---------------- cotes mesurées du pot (mm) ----------------
+A_BORD   = 55.60   # diamètre extérieur de la lèvre
+C_LEVRE  = 3.85    # hauteur de la lèvre
+E_VENTRE = 59.24   # diamètre maximal du ventre (à 13,8 mm du fond)
+F_FOND   = 44.50   # diamètre du fond plat
+# ---------------- réglages ----------------
+JEU_BORD  = 0.7    # jeu radial autour de la lèvre
+JEU_FOND  = 0.7    # jeu radial autour du fond
+PROF_FOND = 11.0   # profondeur du logement qui coiffe le fond
+PAROI     = 2.4    # épaisseur de paroi
+BOMBE     = 1.0    # relief de l'anneau extérieur
+# -------------------------------------------
+r_b   = A_BORD/2 + JEU_BORD          # logement lèvre
+h_b   = C_LEVRE - 0.85               # partie droite du logement lèvre
+r_t   = F_FOND/2 - 3.25              # trou central (le fond plat repose autour)
+z_pl  = h_b + (r_b - r_t) + 1.2    # toit conique à 45° + méplat de 1,2 mm
+r_f   = E_VENTRE/2 + JEU_FOND        # logement fond
+H     = z_pl + PROF_FOND
+r_ext = r_f + PAROI
 
-inner = [(r_f0, 0), (r_trou, H_FOND-1.2), (r_trou, H_FOND), (r_c0, H_FOND), (r_c1, H)]
-outer = [(r_ext + BOMBE*np.sin(np.pi*z/H), z) for z in np.linspace(H, 0, 40)]
-ring = m3.Manifold.revolve(m3.CrossSection([(inner + outer)[::-1]]), 160)
+inner = [(r_b+0.6, 0), (r_b, 0.6), (r_b, h_b), (r_t, z_pl-1.2), (r_t, z_pl), (r_f, z_pl), (r_f, H-0.8), (r_f+0.8, H)]
+outer = [(r_ext + BOMBE*np.sin(np.pi*z/H), z) for z in np.linspace(H, 0, 60)]
+ring = m3.Manifold.revolve(m3.CrossSection([(inner + outer)[::-1]]), 180)
 mesh = ring.to_mesh()
 tm = trimesh.Trimesh(mesh.vert_properties[:, :3], mesh.tri_verts)
-if tm.volume < 0: tm.invert()
 tm.export("empileur_pots.stl")
 print("étanche:", tm.is_watertight, "| dimensions:", tm.extents.round(1), "| volume cm3:", round(tm.volume/1000, 1))
-print(f"cône fond: Ø{2*r_trou:.0f}→Ø{2*r_f0:.0f} | cône col: Ø{2*r_c0:.0f}→Ø{2*r_c1:.0f}")
+print(f"logement lèvre Ø{2*r_b:.1f} | logement fond Ø{2*r_f:.1f} prof. {PROF_FOND} | trou Ø{2*r_t:.1f} | écart entre pots {z_pl:.1f} mm")
