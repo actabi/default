@@ -5,14 +5,14 @@ Génère etui_trepied.stl — imprimer debout, fond sur le plateau, sans support
 import numpy as np, manifold3d as m3, trimesh
 
 # ---------------- paramètres (mm) ----------------
-L_TEL    = 79.0   # LARGEUR du téléphone avec coque   <-- estimée, à mesurer
-EP_TEL   = 11.6   # épaisseur avec coque (mesurée)
+L_TEL    = 82.27  # largeur du téléphone avec coque (mesurée)
+EP_TEL   = 11.97  # épaisseur avec coque (mesurée)
 JEU      = 0.8    # jeu total en largeur et en épaisseur
-H_POCHE  = 80.0   # hauteur de l'étui (reste sous les boutons latéraux)
+H_POCHE  = 86.0   # hauteur de l'étui : le bouton le plus bas commence à 92,65 mm
 LEVRE    = 5.0    # recouvrement des bords de l'écran
 H_BAS    = 6.0    # hauteur du rebord avant en bas
 FOND, COTE, DOS, AVANT = 4.0, 3.0, 4.0, 3.0   # épaisseurs
-CABLE    = 16.0   # largeur du passage de câble USB-C
+CABLE    = 18.0   # passage de câble (fiche USB-C mesurée : 15,71)
 JEU_FIL  = 0.30   # jeu radial des filetages imprimés
 PROF_FIL = 8.5
 # -------------------------------------------------

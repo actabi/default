@@ -12,5 +12,5 @@ for k,(el,az,t) in enumerate([(25,-70,"Vue avant"),(20,65,"Vue arrière : fileta
     keep=sub.face_normals@cam>0; sh=np.clip(sub.face_normals@Lk,0,1)*0.7+0.3
     col=np.c_[np.outer(sh,[0.25,0.75,0.35]),np.ones(len(sh))][keep]
     ax.add_collection3d(Poly3DCollection(sub.triangles[keep],facecolors=col,edgecolors=col,linewidths=0.1))
-    ax.set_xlim(-8,92);ax.set_ylim(-40,60);ax.set_zlim(-8,92);ax.set_box_aspect((1,1,1));ax.view_init(el,az);ax.set_axis_off();ax.set_title(t)
+    ax.set_xlim(-6,94);ax.set_ylim(-40,60);ax.set_zlim(-8,92);ax.set_box_aspect((1,1,1));ax.view_init(el,az);ax.set_axis_off();ax.set_title(t)
 plt.subplots_adjust(0,0,1,0.95,0,0); plt.savefig("apercu_etui.png")
