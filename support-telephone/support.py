@@ -4,7 +4,7 @@ Modifier les paramètres puis : python3 support.py"""
 import numpy as np, manifold3d as m3, trimesh
 
 # ---------------- paramètres (mm) ----------------
-EP_TEL   = 13.0   # épaisseur max acceptée (téléphone + coque) ; S26+ nu ≈ 7,3
+EP_TEL   = 12.0   # épaisseur à loger ; S26+ avec coque mesuré à 11,6 (le berceau ajoute 1 mm de jeu)
 ANGLE    = 70.0   # inclinaison de l'écran par rapport à la table (degrés)
 LARGEUR  = 70.0   # largeur du support
 T        = 6.0    # épaisseur des montants
