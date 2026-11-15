@@ -3,8 +3,8 @@ Modifier les paramètres ci-dessous puis : python3 socle.py"""
 import numpy as np, manifold3d as m3, trimesh
 
 # ---------------- paramètres (mm) ----------------
-D_MOULIN   = 50.0   # diamètre de la base des moulins  <-- À MESURER
-JEU        = 2.0    # jeu radial autour du moulin
+D_MOULIN   = 55.5   # diamètre max de la base des moulins (mesuré : 55,48)
+JEU        = 1.25   # jeu radial autour du moulin
 PAROI      = 4.0    # épaisseur paroi extérieure (hors anneaux)
 ENTRE      = 5.0    # épaisseur entre les deux logements
 FOND       = 4.0    # épaisseur du fond
