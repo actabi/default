@@ -9,8 +9,8 @@ A_BORD  = 55.60   # diamètre extérieur de la lèvre
 C_LEVRE = 3.85    # hauteur de la lèvre
 D_COL   = 51.00   # diamètre du col sous la lèvre
 # ---------------- réglages ----------------
-JEU     = 0.10    # jeu radial entre la jupe et la lèvre
-SERRAGE = 0.55    # dépassement radial du bourrelet sous la lèvre (force du clip)
+JEU     = 0.175   # jeu radial entre la jupe et la lèvre
+SERRAGE = 0.50    # dépassement radial du bourrelet sous la lèvre (force du clip)
 PAROI   = 1.2     # épaisseur de la jupe (plus fin = plus souple)
 DESSUS  = 1.6     # épaisseur du dessus
 LANGUETTE = 0.0   # longueur de la languette d'ouverture (0 = aucune)
@@ -18,7 +18,7 @@ LANGUETTE = 0.0   # longueur de la languette d'ouverture (0 = aucune)
 r_i = A_BORD/2 + JEU
 r_o = r_i + PAROI
 b   = JEU + SERRAGE                       # saillie du bourrelet
-zb  = DESSUS + C_LEVRE - 0.3              # le bourrelet remonte sous l'arrondi de la lèvre et plaque le capuchon
+zb  = DESSUS + C_LEVRE                    # début du bourrelet, au ras du dessous de la lèvre
 zt  = zb + 2*b + 0.6                      # bas de la jupe
 assert r_i - b > D_COL/2, "le bourrelet toucherait le col"
 prof = [(0,0), (r_o-0.4,0), (r_o,0.4), (r_o,zt), (r_i+0.3,zt), (r_i-b,zb+b+0.3), (r_i-b,zb+b), (r_i,zb), (r_i,DESSUS), (0,DESSUS)]
