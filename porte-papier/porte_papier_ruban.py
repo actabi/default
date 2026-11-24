@@ -1,6 +1,6 @@
 """Porte-rouleau « ruban » : une seule bande continue qui part du mur, se retourne
 en courbe douce et devient le bras. Vis cachées derrière le rouleau.
-Génère porte_papier_ruban.stl — imprimer dans le sens d'utilisation, sans supports.
+Génère deux fichiers miroir (bout ouvert à gauche ou à droite) — imprimer dans le sens d'utilisation, sans supports.
 Modifier les paramètres puis : python3 porte_papier_ruban.py"""
 import numpy as np, manifold3d as m3, trimesh
 
@@ -13,7 +13,6 @@ CONGE     = 4.5    # arrondi des arêtes du dessus
 ERGOT     = 6.0    # relevé en bout de bras (anti-chute)
 N_SQ      = 2.6    # forme de la courbe : 2 = demi-cercle, plus = « squircle »
 D_VIS, D_TETE, D_ACCES = 4.6, 9.0, 7.5   # vis de 4 fraisées ; trous d'accès tournevis dans le bras
-ROULEAU_PAR_LA_DROITE = False   # False : face au mur, on enfile le rouleau par la gauche
 # -------------------------------------------------
 J = m3.JoinType.Round
 b = (T + R_ROULEAU + 3 + T) / 2            # demi-profondeur : un rouleau plein passe devant la patte murale
@@ -60,10 +59,14 @@ for x in (a+22, a+86):
     k = (D_TETE-D_VIS)/2
     corps -= m3.Manifold.cylinder(k+0.02, D_VIS/2, D_TETE/2+0.02, 48).rotate((-90,0,0)).translate((x, T-k, z))
     corps -= cyl(D_ACCES, 2*b-T-1, 2*b+1, x, z)                  # passage du tournevis à travers le bras
-if ROULEAU_PAR_LA_DROITE: corps = corps.mirror((1,0,0))
-mesh = corps.to_mesh()
-tm = trimesh.Trimesh(mesh.vert_properties[:, :3], mesh.tri_verts)
-tm.export("porte_papier_ruban.stl")
+def exporte(m, nom):
+    mesh = m.to_mesh()
+    t = trimesh.Trimesh(mesh.vert_properties[:, :3], mesh.tri_verts)
+    t.export(nom); return t
+# deux fichiers : face au mur, le bout ouvert (et son relevé anti-chute) à gauche ou à droite
+tm = exporte(corps, "porte_papier_ruban_ouvert_a_gauche.stl")
+tm_d = exporte(corps.mirror((1,0,0)), "porte_papier_ruban_ouvert_a_droite.stl")
 y_axe = 2*b - T/2
 if __name__ == "__main__":
+    print("droite étanche:", tm_d.is_watertight, "| volume:", round(tm_d.volume/1000,1))
     print("étanche:", tm.is_watertight, "| corps:", len(tm.split()), "| bornes:", tm.bounds.round(1).tolist(), "| volume cm3:", round(tm.volume/1000,1))

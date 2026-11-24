@@ -2,7 +2,7 @@ import trimesh, numpy as np, matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import porte_papier_ruban as P
-tm = trimesh.load("porte_papier_ruban.stl")
+tm = trimesh.load("porte_papier_ruban_ouvert_a_gauche.stl")
 sub = trimesh.Trimesh(*trimesh.remesh.subdivide_to_size(tm.vertices, tm.faces, 5))
 rc, R, L = 20.0, 55.0, P.L_ROULEAU
 roll = trimesh.creation.annulus(rc, R, L, sections=64)
